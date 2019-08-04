@@ -6,10 +6,7 @@ class App extends React.Component {
       super(props);
 
       this.state = {
-         board: null,
-         score: 0,
-         gameOver: false,
-         message: null
+         board: null
       };
    }
 
@@ -25,7 +22,7 @@ class App extends React.Component {
       // When mounted calls function to iniate the board/game
       this.initBoard();
 
-      // Adds keyboard event listening
+      // Keyboard event listening
       const body = document.querySelector("body");
       body.addEventListener("keydown", this.handleKeyDown.bind(this));
    }
@@ -54,15 +51,11 @@ class App extends React.Component {
    render() {
       return (
          <div>
-            <div className="score">Score: {this.state.score}</div>
-
             <table>
                {this.state.board.map((row, i) => (
                   <Row key={i} row={row} />
                ))}
             </table>
-
-            <p>{this.state.message}</p>
          </div>
       );
    }
