@@ -13,21 +13,56 @@ class App extends React.Component {
    // Function to iniate a blank board/game
    initBoard() {
       let board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
-      // TODO board = placeRandomNumberFunc(placeRandomNumberFunc(board))
-      this.setState({ board, score: 0, gameOver: false, message: null });
+      // Places two random numbers at start of game
+      board = this.placeRandomStartNum(this.placeRandomStartNum(board));
+      this.setState({ board });
    }
 
    // Function called when the component mounts
    componentWillMount() {
-      // When mounted calls function to iniate the board/game
+      // When mounted
+      // Calls function to iniate the board/game
       this.initBoard();
-
       // Keyboard event listening
       const body = document.querySelector("body");
       body.addEventListener("keydown", this.handleKeyDown.bind(this));
    }
 
-   // Function to handle desigated key presses
+   // PLaces a single random starting number on a random blank coordinate on the board
+   placeRandomStartNum(board) {
+      const blankCoordinates = this.getBlankCoordinate(board);
+      const randomBlankCoord =
+         blankCoordinates[Math.floor(Math.random() * blankCoordinates.length)];
+      const randomStartNumber = this.getRandomStartNum();
+
+      board[randomBlankCoord[0]][randomBlankCoord[1]] = randomStartNumber;
+
+      return board;
+   }
+   // Interates over each row and each column of said row, if the value is strictly '0'
+   // then the blank coordinate gets pushed to an array which is later returned from the function
+   // '0' = Blank
+   getBlankCoordinate(board) {
+      const blankCoordinates = [];
+
+      for (let row = 0; row < board.length; row++) {
+         for (let column = 0; column < board[row].length; column++) {
+            if (board[row][column] === 0) {
+               blankCoordinates.push([row, column]);
+            }
+         }
+      }
+      return blankCoordinates;
+   }
+   // Generates a random number from given array of starting numbers and returns it
+   getRandomStartNum() {
+      const startingNumbers = [2, 4];
+      const randomStartNumber =
+         startingNumbers[Math.floor(Math.random() * startingNumbers.length)];
+      return randomStartNumber;
+   }
+
+   // Handle desigated key presses
    handleKeyDown(pressedKey) {
       const up = 38;
       const right = 39;
@@ -36,12 +71,16 @@ class App extends React.Component {
       const n = 78;
 
       if (pressedKey.keyCode === up) {
+         console.log(up);
          // this.move('up');
       } else if (pressedKey.keyCode === right) {
+         console.log(right);
          // this.move('right');
       } else if (pressedKey.keyCode === down) {
+         console.log(down);
          // this.move('down');
       } else if (pressedKey.keyCode === left) {
+         console.log(left);
          // this.move('left');
       } else if (pressedKey.keyCode === n) {
          this.initBoard();
@@ -75,10 +114,10 @@ const Row = ({ row }) => {
 };
 
 // Renders cells
-// Changes className according to value and displays value if >0
+// Changes className according to value and only displays value if >0
 const Cell = ({ cellValue }) => {
    let color = "cell";
-   let value = cellValue === 0 ? "" : cellValue;
+   let value = cellValue === 0 ? "zero" : cellValue;
    if (value) {
       color += ` color-${value}`;
    }
