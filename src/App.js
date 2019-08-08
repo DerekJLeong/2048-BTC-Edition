@@ -62,26 +62,14 @@ class App extends React.Component {
       return randomStartNumber;
    }
 
-   // Handle desigated key presses
+   // Handles desigated key presses
    handleKeyDown(pressedKey) {
-      const up = 38;
-      const right = 39;
-      const down = 40;
-      const left = 37;
       const n = 78;
 
-      if (pressedKey.keyCode === up) {
-         console.log(up);
-         // this.move('up');
-      } else if (pressedKey.keyCode === right) {
-         console.log(right);
-         // this.move('right');
-      } else if (pressedKey.keyCode === down) {
-         console.log(down);
-         // this.move('down');
-      } else if (pressedKey.keyCode === left) {
-         console.log(left);
-         // this.move('left');
+      if (pressedKey.keyCode >= 37 && pressedKey.keyCode <= 41) {
+         var direction = pressedKey.keyCode - 37;
+         console.log(direction);
+         this.move(direction);
       } else if (pressedKey.keyCode === n) {
          this.initBoard();
       }
