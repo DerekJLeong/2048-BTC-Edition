@@ -62,6 +62,31 @@ class App extends React.Component {
       return randomStartNumber;
    }
 
+   // Passes direction code to move board in designated direction
+   move(direction) {
+      // First rotates board into base workable postion
+      // 0 -> left, 1 -> up, 2 -> right, 3 -> down
+      for (var i = 0; i < direction; ++i) {
+         console.log(this.state.board);
+         this.setState({ board: this.counterClockwise90deg(this.state.board) });
+      }
+   }
+   counterClockwise90deg(matrix) {
+      console.log(matrix);
+      var rows = matrix.length;
+      var columns = matrix[0].length;
+      var result = [];
+      for (var row = 0; row < rows; ++row) {
+         // push blank row to result matrix
+         result.push([]);
+         for (var column = 0; column < columns; ++column) {
+            // populate the blank row with the previous'
+            result[row][column] = matrix[column][columns - row - 1];
+         }
+      }
+      return result;
+   }
+
    // Handles desigated key presses
    handleKeyDown(pressedKey) {
       const n = 78;
