@@ -66,25 +66,65 @@ class App extends React.Component {
    move(direction) {
       // First rotates board into base workable postion
       // 0 -> left, 1 -> up, 2 -> right, 3 -> down
-      for (var i = 0; i < direction; ++i) {
-         console.log(this.state.board);
+      for (let i = 0; i < direction; ++i) {
+         this.setState({ board: this.counterClockwise90deg(this.state.board) });
+      }
+      this.setState({ board: this.matchTiles(this.state.board) });
+      // Rotates board to original position
+      for (var i = direction; i < 4; ++i) {
          this.setState({ board: this.counterClockwise90deg(this.state.board) });
       }
    }
    counterClockwise90deg(matrix) {
-      console.log(matrix);
-      var rows = matrix.length;
-      var columns = matrix[0].length;
-      var result = [];
-      for (var row = 0; row < rows; ++row) {
+      let rows = matrix.length;
+      let columns = matrix[0].length;
+      let result = [];
+      for (let row = 0; row < rows; ++row) {
          // push blank row to result matrix
          result.push([]);
-         for (var column = 0; column < columns; ++column) {
+         for (let column = 0; column < columns; column++) {
             // populate the blank row with the previous'
             result[row][column] = matrix[column][columns - row - 1];
          }
       }
       return result;
+   }
+   matchTiles(oldBoard) {
+      let board = oldBoard;
+      let newBoard = [];
+
+      for (let row = 0; row < board.length; row++) {
+         let newRow = [];
+         for (let column = board[row].length - 1; column >= 0; column--) {
+            let currentCell = board[row][column];
+            currentCell === 0
+               ? newRow.push(currentCell)
+               : newRow.unshift(currentCell);
+         }
+         newBoard.push(newRow);
+      }
+
+      for (let row = 0; row < newBoard.length; row++) {
+         for (let column = 0; column < newBoard.length; column++) {
+            if (
+               newBoard[row][column] > 0 &&
+               newBoard[row][column] === newBoard[row][column + 1]
+            ) {
+               newBoard[row][column] =
+                  newBoard[row][column] + newBoard[row][column + 1];
+               newBoard[row][column + 1] = 0;
+               //TODO increment score
+            } else if (
+               newBoard[row][column] === 0 &&
+               newBoard[row][column + 1] > 0
+            ) {
+               newBoard[row][column] = newBoard[row][column + 1];
+               newBoard[row][column] = 0;
+            }
+         }
+      }
+      console.log(newBoard);
+      return newBoard;
    }
 
    // Handles desigated key presses
@@ -92,7 +132,7 @@ class App extends React.Component {
       const n = 78;
 
       if (pressedKey.keyCode >= 37 && pressedKey.keyCode <= 41) {
-         var direction = pressedKey.keyCode - 37;
+         let direction = pressedKey.keyCode - 37;
          console.log(direction);
          this.move(direction);
       } else if (pressedKey.keyCode === n) {
