@@ -6,8 +6,9 @@ class App extends React.Component {
       super(props);
 
       this.state = {
-         board: null
-         //TODO add score
+         board: null,
+         score: 0
+         //TODO add gameOver
       };
    }
 
@@ -16,7 +17,7 @@ class App extends React.Component {
       let board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
       // Places two random numbers at start of game
       board = this.placeRandomStartNum(this.placeRandomStartNum(board));
-      this.setState({ board });
+      this.setState({ board, score: 0 });
    }
 
    // Function called when the component mounts
@@ -70,10 +71,16 @@ class App extends React.Component {
       for (let i = 0; i < direction; ++i) {
          this.setState({ board: this.counterClockwise90deg(this.state.board) });
       }
-      const matchedBoard = this.matchTiles(this.state.board);
-      if (this.boardMoved(this.state.board, matchedBoard)) {
-         const matchedBoardWithRandom = this.placeRandomStartNum(matchedBoard);
-         this.setState({ board: matchedBoardWithRandom });
+      const movedBoard = this.matchTiles(this.state.board);
+      if (this.boardMoved(this.state.board, movedBoard.newBoard)) {
+         const movedBoardWithRandom = this.placeRandomStartNum(
+            movedBoard.newBoard
+         );
+         this.setState({
+            board: movedBoardWithRandom,
+            score: (this.state.score += movedBoard.points)
+         });
+         console.log(this.state.score);
          //TODO check for game over
       }
       //TODO else {game over}
@@ -99,6 +106,7 @@ class App extends React.Component {
    matchTiles(oldBoard) {
       let board = oldBoard;
       let newBoard = [];
+      let points = 0;
 
       for (let row = 0; row < board.length; row++) {
          let newRow = [];
@@ -120,7 +128,7 @@ class App extends React.Component {
                newBoard[row][column] =
                   newBoard[row][column] + newBoard[row][column + 1];
                newBoard[row][column + 1] = 0;
-               //TODO increment score
+               points += newBoard[row][column];
             } else if (
                newBoard[row][column] === 0 &&
                newBoard[row][column + 1] > 0
@@ -131,7 +139,7 @@ class App extends React.Component {
          }
       }
       console.log(newBoard);
-      return newBoard;
+      return { newBoard, points };
    }
    boardMoved(original, updated) {
       return JSON.stringify(updated) !== JSON.stringify(original)
@@ -155,6 +163,7 @@ class App extends React.Component {
    render() {
       return (
          <div>
+            <div className="score">Score: {this.state.score}</div>
             <table>
                {this.state.board.map((row, i) => (
                   <Row key={i} row={row} />
