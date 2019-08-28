@@ -7,6 +7,7 @@ class App extends React.Component {
 
       this.state = {
          board: null
+         //TODO add score
       };
    }
 
@@ -69,7 +70,13 @@ class App extends React.Component {
       for (let i = 0; i < direction; ++i) {
          this.setState({ board: this.counterClockwise90deg(this.state.board) });
       }
-      this.setState({ board: this.matchTiles(this.state.board) });
+      const matchedBoard = this.matchTiles(this.state.board);
+      if (this.boardMoved(this.state.board, matchedBoard)) {
+         const matchedBoardWithRandom = this.placeRandomStartNum(matchedBoard);
+         this.setState({ board: matchedBoardWithRandom });
+         //TODO check for game over
+      }
+      //TODO else {game over}
       // Rotates board to original position
       for (var i = direction; i < 4; ++i) {
          this.setState({ board: this.counterClockwise90deg(this.state.board) });
@@ -126,6 +133,11 @@ class App extends React.Component {
       console.log(newBoard);
       return newBoard;
    }
+   boardMoved(original, updated) {
+      return JSON.stringify(updated) !== JSON.stringify(original)
+         ? true
+         : false;
+   }
 
    // Handles desigated key presses
    handleKeyDown(pressedKey) {
@@ -170,7 +182,7 @@ const Row = ({ row }) => {
 // Changes className according to value and only displays value if >0
 const Cell = ({ cellValue }) => {
    let color = "cell";
-   let value = cellValue === 0 ? "zero" : cellValue;
+   let value = cellValue === 0 ? "" : cellValue;
    if (value) {
       color += ` color-${value}`;
    }
