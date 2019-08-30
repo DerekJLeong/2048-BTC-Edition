@@ -7,8 +7,9 @@ class App extends React.Component {
 
       this.state = {
          board: null,
-         score: 0
-         //TODO add gameOver
+         score: 0,
+         gameOver: false,
+         message: "GOOD LUCK & HODL ON"
       };
    }
 
@@ -68,25 +69,38 @@ class App extends React.Component {
    move(direction) {
       // First rotates board into base workable postion
       // 0 -> left, 1 -> up, 2 -> right, 3 -> down
-      for (let i = 0; i < direction; ++i) {
-         this.setState({ board: this.counterClockwise90deg(this.state.board) });
-      }
-      const movedBoard = this.matchTiles(this.state.board);
-      if (this.boardMoved(this.state.board, movedBoard.newBoard)) {
-         const movedBoardWithRandom = this.placeRandomStartNum(
-            movedBoard.newBoard
-         );
-         this.setState({
-            board: movedBoardWithRandom,
-            score: (this.state.score += movedBoard.points)
-         });
-         console.log(this.state.score);
-         //TODO check for game over
-      }
-      //TODO else {game over}
-      // Rotates board to original position
-      for (var i = direction; i < 4; ++i) {
-         this.setState({ board: this.counterClockwise90deg(this.state.board) });
+      if (!this.state.gameOver) {
+         for (let i = 0; i < direction; ++i) {
+            this.setState({
+               board: this.counterClockwise90deg(this.state.board)
+            });
+         }
+         const movedBoard = this.moveTiles(this.state.board);
+         if (this.boardMoved(this.state.board, movedBoard.newBoard)) {
+            const movedBoardWithRandom = this.placeRandomStartNum(
+               movedBoard.newBoard
+            );
+
+            if (this.checkForGameOver(movedBoardWithRandom)) {
+               this.setState({
+                  board: movedBoardWithRandom,
+                  gameOver: true,
+                  message: "Game Over!"
+               });
+            } else {
+               this.setState({
+                  board: movedBoardWithRandom,
+                  score: (this.state.score += movedBoard.points)
+               });
+            }
+         }
+         //TODO else {game over}
+         // Rotates board to original position
+         for (var i = direction; i < 4; ++i) {
+            this.setState({
+               board: this.counterClockwise90deg(this.state.board)
+            });
+         }
       }
    }
    counterClockwise90deg(matrix) {
@@ -103,7 +117,7 @@ class App extends React.Component {
       }
       return result;
    }
-   matchTiles(oldBoard) {
+   moveTiles(oldBoard) {
       let board = oldBoard;
       let newBoard = [];
       let points = 0;
@@ -141,6 +155,20 @@ class App extends React.Component {
       console.log(newBoard);
       return { newBoard, points };
    }
+   checkForGameOver(board) {
+      let up = this.counterClockwise90deg(board);
+      let right = this.counterClockwise90deg(this.counterClockwise90deg(board));
+      let down = this.counterClockwise90deg(
+         this.counterClockwise90deg(this.counterClockwise90deg(board))
+      );
+      let moves = [
+         this.boardMoved(board, this.moveTiles(board).newBoard),
+         this.boardMoved(up, this.moveTiles(up).newBoard),
+         this.boardMoved(right, this.moveTiles(right).newBoard),
+         this.boardMoved(down, this.moveTiles(down).newBoard)
+      ];
+      return moves.includes(true) ? false : true;
+   }
    boardMoved(original, updated) {
       return JSON.stringify(updated) !== JSON.stringify(original)
          ? true
@@ -163,6 +191,7 @@ class App extends React.Component {
    render() {
       return (
          <div>
+            <p>{this.state.message}</p>
             <div className="score">Score: {this.state.score}</div>
             <table>
                {this.state.board.map((row, i) => (
