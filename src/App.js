@@ -4,7 +4,6 @@ import "./App.css";
 class App extends React.Component {
    constructor(props) {
       super(props);
-
       this.state = {
          board: null,
          score: 0,
@@ -191,16 +190,20 @@ class App extends React.Component {
    render() {
       return (
          <div>
-            <p>{this.state.message}</p>
             <div className="score">Score: {this.state.score}</div>
             <table>
                {this.state.board.map((row, i) => (
                   <Row key={i} row={row} />
                ))}
             </table>
+            <Modal {...this.state} />
          </div>
       );
    }
+}
+
+function Modal(props) {
+   return <div>{props.gameOver ? <p>{props.message}</p> : null}</div>;
 }
 
 // Renders rows of cells
