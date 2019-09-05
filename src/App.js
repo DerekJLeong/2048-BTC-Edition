@@ -103,7 +103,12 @@ class App extends React.Component {
                });
             }
          }
-         //TODO else {game over}
+         if (this.checkForWin(this.state.score, this.state.bitcoin)) {
+            this.setState({
+               gameOver: true,
+               message: "You Won! Hodl on!"
+            });
+         }
          // Rotates board to original position
          for (var i = direction; i < 4; ++i) {
             this.setState({
@@ -161,7 +166,6 @@ class App extends React.Component {
             }
          }
       }
-      console.log(newBoard);
       return { newBoard, points };
    }
    checkForGameOver(board) {
@@ -183,6 +187,9 @@ class App extends React.Component {
          ? true
          : false;
    }
+   checkForWin(score, bitcoin) {
+      return score >= parseFloat(bitcoin.replace(/,/g, "")) ? true : false;
+   }
 
    // Handles desigated key presses
    handleKeyDown(pressedKey) {
@@ -190,7 +197,6 @@ class App extends React.Component {
 
       if (pressedKey.keyCode >= 37 && pressedKey.keyCode <= 41) {
          let direction = pressedKey.keyCode - 37;
-         console.log(direction);
          this.move(direction);
       } else if (pressedKey.keyCode === n) {
          this.initBoard();
