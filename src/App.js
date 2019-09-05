@@ -1,14 +1,19 @@
 import React from "react";
 import "./App.css";
+import CurrentBTC from "./currentBTC";
+
+const API = "https://api.coindesk.com/v1/bpi/currentprice.json";
 
 class App extends React.Component {
    constructor(props) {
       super(props);
+
       this.state = {
          board: null,
          score: 0,
          gameOver: false,
-         message: "GOOD LUCK & HODL ON"
+         message: "GOOD LUCK & HODL ON",
+         bitcoin: 0
       };
    }
 
@@ -28,6 +33,11 @@ class App extends React.Component {
       // Keyboard event listening
       const body = document.querySelector("body");
       body.addEventListener("keydown", this.handleKeyDown.bind(this));
+   }
+   componentDidMount() {
+      fetch(API)
+         .then(response => response.json())
+         .then(data => this.setState({ bitcoin: data.bpi.USD.rate }));
    }
 
    // PLaces a single random starting number on a random blank coordinate on the board
@@ -197,6 +207,7 @@ class App extends React.Component {
                ))}
             </table>
             <Modal {...this.state} />
+            <CurrentBTC BTCUSD={this.state.bitcoin} />
          </div>
       );
    }
