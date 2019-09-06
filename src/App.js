@@ -68,9 +68,8 @@ class App extends React.Component {
    }
    // Generates a random number from given array of starting numbers and returns it
    getRandomStartNum() {
-      const startingNumbers = [2, 4];
-      const randomStartNumber =
-         startingNumbers[Math.floor(Math.random() * startingNumbers.length)];
+      const fourProbability = 0.175;
+      const randomStartNumber = Math.random() < fourProbability ? 4 : 2;
       return randomStartNumber;
    }
 
