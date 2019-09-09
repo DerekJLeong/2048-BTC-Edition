@@ -1,0 +1,45 @@
+.game_container {
+   width: 100%;
+   height: auto;
+   font-family: "Clear Sans";
+   margin: 80px 0;
+}
+.btc_container h1 {
+   width: calc(50%-2em);
+   margin: 1em;
+   margin-left: 10%;
+   float: left;
+   font-size: 56px;
+   font-weight: bold;
+}
+.score {
+   width: calc(50%-2em);
+   margin: 1em;
+   margin-right: 10%;
+   float: left;
+   font-size: 56px;
+   font-weight: bold;
+}
+.game_board {
+   width: 500px;
+   height: 500px;
+   margin: 0 auto;
+   background: #bbada0;
+   border-radius: 6px;
+   border-spacing: 15px;
+}
+.game_board td {
+}
+.cell {
+   width: 107px;
+   height: 107px;
+   border-radius: 3px;
+   background: rgba(238, 228, 218, 0.35);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 55px;
+}
+
+.number {
+}

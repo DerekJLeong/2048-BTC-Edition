@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import CurrentBTC from "./currentBTC";
+import Score from "./score";
 
 const API = "https://api.coindesk.com/v1/bpi/currentprice.json";
 
@@ -187,7 +188,7 @@ class App extends React.Component {
          : false;
    }
    checkForWin(score, bitcoin) {
-      return score >= parseFloat(bitcoin.replace(/,/g, "")) ? true : false;
+      return score >= parseFloat(bitcoin.replace(/,/, "")) ? true : false;
    }
 
    // Handles desigated key presses
@@ -204,15 +205,15 @@ class App extends React.Component {
 
    render() {
       return (
-         <div>
-            <div className="score">Score: {this.state.score}</div>
-            <table>
+         <div className="game_container">
+            <CurrentBTC BTCUSD={this.state.bitcoin} />
+            <Score score={this.state.score} />
+            <Modal {...this.state} />
+            <table className="game_board">
                {this.state.board.map((row, i) => (
                   <Row key={i} row={row} />
                ))}
             </table>
-            <Modal {...this.state} />
-            <CurrentBTC BTCUSD={this.state.bitcoin} />
          </div>
       );
    }
@@ -225,7 +226,7 @@ function Modal(props) {
 // Renders rows of cells
 const Row = ({ row }) => {
    return (
-      <tbody>
+      <tbody className="cell_row">
          <tr>
             {row.map((cell, i) => (
                <Cell key={i} cellValue={cell} />

@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import "./App.css";
+
 class CurrentBTC extends Component {
    render() {
       return (
-         <div>
-            <h2>{this.props.BTCUSD}</h2>
+         <div className="btc_container">
+            <h1>${this.props.BTCUSD}</h1>
          </div>
       );
    }
