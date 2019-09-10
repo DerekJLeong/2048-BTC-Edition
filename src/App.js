@@ -252,7 +252,10 @@ const Cell = ({ cellValue }) => {
    let color = "cell";
    let value = cellValue === 0 ? "" : cellValue;
    if (value) {
-      color += ` color-${value}`;
+      color += ` color_${value}`;
+   }
+   if (value > 2048) {
+      color += " color_super";
    }
 
    return (
