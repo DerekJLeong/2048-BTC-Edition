@@ -210,9 +210,9 @@ class App extends React.Component {
             <div className="top_container">
                <CurrentBTC BTCUSD={this.state.bitcoin} />
                <Score score={this.state.score} />
-               <p>
+               <p className="intro">
                   Join the numbers together and get a score <br />
-                  greater than the current USD/Bitcoin price!
+                  greater than the <b>current USD/Bitcoin price!</b>
                </p>
                <div className="reset_button" onClick={this.initBoard}>
                   New Game
