@@ -5,7 +5,7 @@ class CurrentBTC extends Component {
    render() {
       return (
          <div className="btc_container">
-            <h1>${this.props.BTCUSD}</h1>
+            <p>${this.props.BTCUSD}</p>
          </div>
       );
    }

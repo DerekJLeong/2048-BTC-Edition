@@ -4,22 +4,75 @@
    font-family: "Clear Sans";
    margin: 80px 0;
 }
-.btc_container h1 {
+
+.top_container {
+   width: 100%;
+   height: auto;
+   display: flex;
+   flex-flow: row wrap;
+   justify-content: center;
+   align-items: center;
+   align-content: center;
+}
+.btc_container p {
    width: calc(50%-2em);
-   margin: 1em;
-   margin-left: 10%;
+   margin: 0 1em;
    float: left;
    font-size: 56px;
    font-weight: bold;
 }
-.score {
+.score_container {
    width: calc(50%-2em);
    margin: 1em;
-   margin-right: 10%;
-   float: left;
-   font-size: 56px;
+   margin-right: 2.5em;
+   position: relative;
+   display: inline-block;
+   background: #bbada0;
+   padding: 15px 25px;
+   font-size: 25px;
+   height: 25px;
+   line-height: 47px;
    font-weight: bold;
+   border-radius: 3px;
+   text-align: center;
 }
+.score_container p:nth-of-type(1) {
+   font-size: 25px;
+   line-height: 25px;
+   color: #eee4da;
+   font-size: 13px;
+   line-height: 13px;
+   margin: 0;
+   position: absolute;
+   width: 100%;
+   top: 10px;
+   left: 0;
+}
+.score_container p:nth-of-type(2) {
+   font-size: 25px;
+   line-height: 25px;
+   font-weight: bold;
+   font-size: 25px;
+   line-height: 47px;
+   margin: 0;
+   color: white;
+}
+.top_container p {
+   width: 50%;
+}
+.reset_button {
+   background: #8f7a66;
+   border-radius: 3px;
+   padding: 0 20px;
+   text-decoration: none;
+   color: #f9f6f2;
+   height: 40px;
+   line-height: 42px;
+   display: block;
+   text-align: center;
+   float: right;
+}
+
 .game_board {
    width: 500px;
    height: 500px;
@@ -42,4 +95,11 @@
 }
 
 .number {
+}
+
+@media only screen and (min-width: 800px) {
+   .game_container {
+      width: 800px;
+      margin: auto;
+   }
 }

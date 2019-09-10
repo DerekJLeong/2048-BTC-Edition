@@ -16,6 +16,7 @@ class App extends React.Component {
          message: "GOOD LUCK & HODL ON",
          bitcoin: 0
       };
+      this.initBoard = this.initBoard.bind(this);
    }
 
    // Function to iniate a blank board/game
@@ -206,8 +207,17 @@ class App extends React.Component {
    render() {
       return (
          <div className="game_container">
-            <CurrentBTC BTCUSD={this.state.bitcoin} />
-            <Score score={this.state.score} />
+            <div className="top_container">
+               <CurrentBTC BTCUSD={this.state.bitcoin} />
+               <Score score={this.state.score} />
+               <p>
+                  Join the numbers together and get a score <br />
+                  greater than the current USD/Bitcoin price!
+               </p>
+               <div className="reset_button" onClick={this.initBoard}>
+                  New Game
+               </div>
+            </div>
             <Modal {...this.state} />
             <table className="game_board">
                {this.state.board.map((row, i) => (
