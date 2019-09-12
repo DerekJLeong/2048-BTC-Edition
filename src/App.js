@@ -221,7 +221,11 @@ class App extends React.Component {
             <Modal {...this.state} />
             <table className="game_board">
                {this.state.board.map((row, i) => (
-                  <Row key={i} row={row} />
+                  <tr key={i}>
+                     {row.map((cell, i) => (
+                        <Cell key={i} cellValue={cell} />
+                     ))}
+                  </tr>
                ))}
             </table>
          </div>
@@ -233,23 +237,10 @@ function Modal(props) {
    return <div>{props.gameOver ? <p>{props.message}</p> : null}</div>;
 }
 
-// Renders rows of cells
-const Row = ({ row }) => {
-   return (
-      <tbody className="cell_row">
-         <tr>
-            {row.map((cell, i) => (
-               <Cell key={i} cellValue={cell} />
-            ))}
-         </tr>
-      </tbody>
-   );
-};
-
 // Renders cells
 // Changes className according to value and only displays value if >0
 const Cell = ({ cellValue }) => {
-   let color = "cell";
+   let color = "tile";
    let value = cellValue === 0 ? "" : cellValue;
    if (value) {
       color += ` color_${value}`;
@@ -259,10 +250,8 @@ const Cell = ({ cellValue }) => {
    }
 
    return (
-      <td>
-         <div className={color}>
-            <div className="number">{value}</div>
-         </div>
+      <td className="cell">
+         <div className={color}>{value}</div>
       </td>
    );
 };

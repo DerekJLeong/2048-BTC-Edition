@@ -83,22 +83,26 @@
    background: #bbada0;
    border-radius: 6px;
    border-spacing: 15px;
+   /* table-layout: fixed; */
 }
 .game_board td {
+   padding: 0;
 }
 .cell {
-   width: 107px;
-   height: 107px;
+   width: 110px;
+   height: 110px;
    border-radius: 3px;
    background: rgba(238, 228, 218, 0.35);
-   display: flex;
-   justify-content: center;
-   align-items: center;
    font-size: 55px;
    font-weight: bold;
 }
-
-.number {
+.tile {
+   width: 110px;
+   height: 110px;
+   border-radius: 3px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
 }
 .color_2 {
    background: #eee4da;
