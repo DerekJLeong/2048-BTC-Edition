@@ -193,6 +193,29 @@ class App extends React.Component {
             }
          }
       }
+      //repeated twice in order to solve bug in game logic
+      for (let row = 0; row < newBoard.length; row++) {
+         for (let column = 0; column < newBoard.length; column++) {
+            if (
+               newBoard[row][column] > 0 &&
+               newBoard[row][column] === newBoard[row][column + 1]
+            ) {
+               newBoard[row][column] = [
+                  newBoard[row][column] + newBoard[row][column + 1],
+                  true
+               ];
+               newBoard[row][column + 1] = 0;
+
+               points += newBoard[row][column][0];
+            } else if (
+               newBoard[row][column] === 0 &&
+               newBoard[row][column + 1] > 0
+            ) {
+               newBoard[row][column] = newBoard[row][column + 1];
+               newBoard[row][column + 1] = 0;
+            }
+         }
+      }
       return { newBoard, points };
    }
    checkForGameOver(board) {
