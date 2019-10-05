@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "./Keyframes.css";
 import CurrentBTC from "./currentBTC";
 import Score from "./score";
 
@@ -14,7 +15,9 @@ class App extends React.Component {
          score: 0,
          gameOver: false,
          message: "GOOD LUCK & HODL ON",
-         bitcoin: 0
+         bitcoin: 0,
+
+         isMoving: false
       };
       this.initBoard = this.initBoard.bind(this);
    }
@@ -40,6 +43,21 @@ class App extends React.Component {
       fetch(API)
          .then(response => response.json())
          .then(data => this.setState({ bitcoin: data.bpi.USD.rate }));
+   }
+
+   handleMatchedClass(board) {
+      const matchedBoard = board;
+      let matchlessBoard = [];
+      matchedBoard.forEach(row => {
+         let newRow = [];
+         row.forEach(cell => {
+            cell = cell[1] ? cell[0] : cell;
+            newRow.push(cell);
+         });
+         matchlessBoard.push(newRow);
+      });
+
+      return matchlessBoard;
    }
 
    // PLaces a single random starting number on a random blank coordinate on the board
@@ -70,7 +88,7 @@ class App extends React.Component {
    }
    // Generates a random number from given array of starting numbers and returns it
    getRandomStartNum() {
-      const fourProbability = 0.175;
+      const fourProbability = 0.125;
       const randomStartNumber = Math.random() < fourProbability ? 4 : 2;
       return randomStartNumber;
    }
@@ -79,13 +97,18 @@ class App extends React.Component {
    move(direction) {
       // First rotates board into base workable postion
       // 0 -> left, 1 -> up, 2 -> right, 3 -> down
+      let currentScore = this.state.score;
+
       if (!this.state.gameOver) {
          for (let i = 0; i < direction; ++i) {
             this.setState({
                board: this.counterClockwise90deg(this.state.board)
             });
          }
+         //TODO Shift animation
          const movedBoard = this.moveTiles(this.state.board);
+         // this.setState({ board: movedBoard, isMoving: true });
+
          if (this.boardMoved(this.state.board, movedBoard.newBoard)) {
             const movedBoardWithRandom = this.placeRandomStartNum(
                movedBoard.newBoard
@@ -100,7 +123,7 @@ class App extends React.Component {
             } else {
                this.setState({
                   board: movedBoardWithRandom,
-                  score: (this.state.score += movedBoard.points)
+                  score: (currentScore += movedBoard.points)
                });
             }
          }
@@ -119,6 +142,7 @@ class App extends React.Component {
       }
    }
    counterClockwise90deg(matrix) {
+      console.log(matrix);
       let rows = matrix.length;
       let columns = matrix[0].length;
       let result = [];
@@ -133,14 +157,13 @@ class App extends React.Component {
       return result;
    }
    moveTiles(oldBoard) {
-      let board = oldBoard;
       let newBoard = [];
       let points = 0;
 
-      for (let row = 0; row < board.length; row++) {
+      for (let row = 0; row < oldBoard.length; row++) {
          let newRow = [];
-         for (let column = board[row].length - 1; column >= 0; column--) {
-            let currentCell = board[row][column];
+         for (let column = oldBoard.length - 1; column >= 0; column--) {
+            let currentCell = oldBoard[row][column];
             currentCell === 0
                ? newRow.push(currentCell)
                : newRow.unshift(currentCell);
@@ -154,16 +177,19 @@ class App extends React.Component {
                newBoard[row][column] > 0 &&
                newBoard[row][column] === newBoard[row][column + 1]
             ) {
-               newBoard[row][column] =
-                  newBoard[row][column] + newBoard[row][column + 1];
+               newBoard[row][column] = [
+                  newBoard[row][column] + newBoard[row][column + 1],
+                  true
+               ];
                newBoard[row][column + 1] = 0;
-               points += newBoard[row][column];
+
+               points += newBoard[row][column][0];
             } else if (
                newBoard[row][column] === 0 &&
                newBoard[row][column + 1] > 0
             ) {
                newBoard[row][column] = newBoard[row][column + 1];
-               newBoard[row][column] = 0;
+               newBoard[row][column + 1] = 0;
             }
          }
       }
@@ -198,6 +224,7 @@ class App extends React.Component {
 
       if (pressedKey.keyCode >= 37 && pressedKey.keyCode <= 41) {
          let direction = pressedKey.keyCode - 37;
+         this.setState({ board: this.handleMatchedClass(this.state.board) });
          this.move(direction);
       } else if (pressedKey.keyCode === n) {
          this.initBoard();
@@ -220,10 +247,17 @@ class App extends React.Component {
             </div>
             <Modal {...this.state} />
             <table className="game_board">
-               {this.state.board.map((row, i) => (
-                  <tr key={i}>
+               {this.state.board.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
                      {row.map((cell, i) => (
-                        <Cell key={i} cellValue={cell} />
+                        <Cell
+                           key={i}
+                           cellValue={cell[1] ? cell[0] : cell}
+                           matched={cell[1] ? cell[1] : false}
+                           isMoving={this.state.isMoving}
+                           row={rowIndex}
+                           column={i}
+                        />
                      ))}
                   </tr>
                ))}
@@ -239,19 +273,21 @@ function Modal(props) {
 
 // Renders cells
 // Changes className according to value and only displays value if >0
-const Cell = ({ cellValue }) => {
-   let color = "tile";
+const Cell = ({ cellValue, matched, isMoving, row, column }) => {
+   let classNames = "tile";
    let value = cellValue === 0 ? "" : cellValue;
+   if (matched) {
+      classNames += " matched";
+   }
    if (value) {
-      color += ` color_${value}`;
+      classNames += ` color_${value}`;
    }
    if (value > 2048) {
-      color += " color_super";
+      classNames += " color_super";
    }
-
    return (
       <td className="cell">
-         <div className={color}>{value}</div>
+         <div className={classNames}>{value}</div>
       </td>
    );
 };
