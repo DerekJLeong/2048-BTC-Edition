@@ -186,15 +186,6 @@ class App extends React.Component {
 
                   points += newBoard[row][column][0];
                } else if (
-                  newBoard[row][column][0] > 0 &&
-                  newBoard[row][column][0] === newBoard[row][column + 1][0]
-               ) {
-                  newBoard[row][column][0] = [
-                     newBoard[row][column][0] + newBoard[row][column + 1][0],
-                     true
-                  ];
-                  newBoard[row][column + 1] = 0;
-               } else if (
                   newBoard[row][column] === 0 &&
                   newBoard[row][column + 1] > 0
                ) {
@@ -227,7 +218,7 @@ class App extends React.Component {
          : false;
    }
    checkForWin(score, bitcoin) {
-      return score >= parseFloat(bitcoin.replace(/,/, "")) ? true : false;
+      return score >= parseFloat(bitcoin.replace(/,/g, "")) ? true : false;
    }
 
    // Handles desigated key presses
