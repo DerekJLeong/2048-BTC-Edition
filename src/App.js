@@ -27,7 +27,7 @@ class App extends React.Component {
       let board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
       // Places two random numbers at start of game
       board = this.placeRandomStartNum(this.placeRandomStartNum(board));
-      this.setState({ board, score: 0 });
+      this.setState({ gameOver: false, board, score: 0 });
    }
 
    // Function called when the component mounts
@@ -130,7 +130,7 @@ class App extends React.Component {
          if (this.checkForWin(this.state.score, this.state.bitcoin)) {
             this.setState({
                gameOver: true,
-               message: "You Won! Hodl on!"
+               message: "You Won! Hodl On!"
             });
          }
          // Rotates board to original position
@@ -248,30 +248,40 @@ class App extends React.Component {
                   New Game
                </div>
             </div>
-            <Modal {...this.state} />
-            <table className="game_board">
-               {this.state.board.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                     {row.map((cell, i) => (
-                        <Cell
-                           key={i}
-                           cellValue={cell[1] ? cell[0] : cell}
-                           matched={cell[1] ? cell[1] : false}
-                           isMoving={this.state.isMoving}
-                           row={rowIndex}
-                           column={i}
-                        />
-                     ))}
-                  </tr>
-               ))}
-            </table>
+            <div className="middle_container">
+               <table className="game_board">
+                  {this.state.board.map((row, rowIndex) => (
+                     <tr key={rowIndex}>
+                        {row.map((cell, i) => (
+                           <Cell
+                              key={i}
+                              cellValue={cell[1] ? cell[0] : cell}
+                              matched={cell[1] ? cell[1] : false}
+                              isMoving={this.state.isMoving}
+                              row={rowIndex}
+                              column={i}
+                           />
+                        ))}
+                     </tr>
+                  ))}
+               </table>
+               <Modal {...this.state} />
+            </div>
          </div>
       );
    }
 }
 
 function Modal(props) {
-   return <div>{props.gameOver ? <p>{props.message}</p> : null}</div>;
+   return (
+      <div>
+         {props.gameOver ? (
+            <div className="modal_container">
+               <p className="modal_message">{props.message}</p>
+            </div>
+         ) : null}
+      </div>
+   );
 }
 
 // Renders cells

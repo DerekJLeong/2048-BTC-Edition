@@ -11,6 +11,7 @@ class CurrentBTC extends Component {
       ).toFixed(2);
       return (
          <div className="btc_container">
+            <div className="btc_img"></div>
             <p>${this.numberWithCommas(roundedBTC)}</p>
          </div>
       );

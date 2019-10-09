@@ -14,9 +14,21 @@
    align-items: center;
    align-content: center;
 }
-.btc_container p {
+.btc_container {
    width: calc(50%-2em);
-   margin: 0 1em;
+   display: flex;
+   align-items: center;
+}
+.btc_img {
+   display: block;
+   width: 64px;
+   height: 64px;
+   background: url(bitcoin.svg);
+   background-size: 64px 64px;
+   margin: 5px;
+}
+.btc_container p {
+   margin: 0 1em 0 0;
    float: left;
    font-size: 56px;
    font-weight: bold;
@@ -76,14 +88,37 @@
    float: right;
 }
 
-.game_board {
+.middle_container {
+   position: relative;
    width: 500px;
    height: 500px;
+   margin: 0 auto;
+   padding: 0;
+}
+.modal_container {
+   position: absolute;
+   top: 0;
+   right: -15px;
+   width: calc(100% + 15px);
+   height: calc(100% + 15px);
+   border-radius: 6px;
+   background: rgba(5, 5, 5, 0.3);
+}
+.modal_message {
+   text-align: center;
+   vertical-align: middle;
+   line-height: 430px;
+   font-size: 2.5rem;
+   font-weight: bold;
+   color: #f9f6f2;
+}
+.game_board {
+   width: 100%;
+   height: 100%;
    margin: 0 auto;
    background: #bbada0;
    border-radius: 6px;
    border-spacing: 15px;
-   /* table-layout: fixed; */
 }
 .game_board td {
    padding: 0;
