@@ -40,6 +40,12 @@ class App extends React.Component {
       body.addEventListener("keydown", this.handleKeyDown.bind(this));
    }
    componentDidMount() {
+      this.getBitcoin();
+      this.interval = setInterval(() => {
+         this.getBitcoin();
+      }, 30000);
+   }
+   getBitcoin() {
       fetch(API)
          .then(response => response.json())
          .then(data => this.setState({ bitcoin: data.bpi.USD.rate }));
