@@ -28,15 +28,14 @@
    margin: 5px;
 }
 .btc_container p {
-   margin: 0 1em 0 0;
+   margin: 0;
    float: left;
    font-size: 56px;
    font-weight: bold;
 }
 .score_container {
    width: calc(50%-2em);
-   margin: 1em;
-   margin-right: 2.5em;
+   margin: 1rem;
    position: relative;
    display: inline-block;
    background: #bbada0;

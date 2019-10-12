@@ -39,6 +39,7 @@ class App extends React.Component {
       const body = document.querySelector("body");
       body.addEventListener("keydown", this.handleKeyDown.bind(this));
    }
+
    componentDidMount() {
       this.getBitcoin();
       this.interval = setInterval(() => {
@@ -49,6 +50,10 @@ class App extends React.Component {
       fetch(API)
          .then(response => response.json())
          .then(data => this.setState({ bitcoin: data.bpi.USD.rate }));
+   }
+
+   componentWillUnmount() {
+      clearInterval(this.interval);
    }
 
    handleMatchedClass(board) {
@@ -73,7 +78,8 @@ class App extends React.Component {
          blankCoordinates[Math.floor(Math.random() * blankCoordinates.length)];
       const randomStartNumber = this.getRandomStartNum();
 
-      board[randomBlankCoord[0]][randomBlankCoord[1]] = randomStartNumber;
+      // 2 = new tile anmiation
+      board[randomBlankCoord[0]][randomBlankCoord[1]] = [randomStartNumber, 2];
 
       return board;
    }
@@ -186,7 +192,7 @@ class App extends React.Component {
                ) {
                   newBoard[row][column] = [
                      newBoard[row][column] + newBoard[row][column + 1],
-                     true
+                     1
                   ];
                   newBoard[row][column + 1] = 0;
 
@@ -262,7 +268,9 @@ class App extends React.Component {
                            <Cell
                               key={i}
                               cellValue={cell[1] ? cell[0] : cell}
-                              matched={cell[1] ? cell[1] : false}
+                              // cell[1] = 1(matched) = 2(new)
+                              matched={cell[1] === 1 ? true : false}
+                              isNew={cell[1] === 2 ? true : false}
                               isMoving={this.state.isMoving}
                               row={rowIndex}
                               column={i}
@@ -292,9 +300,12 @@ function Modal(props) {
 
 // Renders cells
 // Changes className according to value and only displays value if >0
-const Cell = ({ cellValue, matched, isMoving, row, column }) => {
+const Cell = ({ cellValue, matched, isNew, isMoving, row, column }) => {
    let classNames = "tile";
    let value = cellValue === 0 ? "" : cellValue;
+   if (isNew) {
+      classNames += " new";
+   }
    if (matched) {
       classNames += " matched";
    }
