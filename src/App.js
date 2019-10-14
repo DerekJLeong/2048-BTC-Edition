@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-import "./Keyframes.css";
 import CurrentBTC from "./currentBTC";
 import Score from "./score";
 
@@ -15,9 +14,7 @@ class App extends React.Component {
          score: 0,
          gameOver: false,
          message: "GOOD LUCK & HODL ON",
-         bitcoin: 0,
-
-         isMoving: false
+         bitcoin: 0
       };
       this.initBoard = this.initBoard.bind(this);
    }
@@ -117,9 +114,7 @@ class App extends React.Component {
                board: this.counterClockwise90deg(this.state.board)
             });
          }
-         //TODO Shift animation
          const movedBoard = this.moveTiles(this.state.board);
-         // this.setState({ board: movedBoard, isMoving: true });
 
          if (this.boardMoved(this.state.board, movedBoard.newBoard)) {
             const movedBoardWithRandom = this.placeRandomStartNum(
@@ -154,7 +149,6 @@ class App extends React.Component {
       }
    }
    counterClockwise90deg(matrix) {
-      console.log(matrix);
       let rows = matrix.length;
       let columns = matrix[0].length;
       let result = [];
@@ -236,9 +230,10 @@ class App extends React.Component {
    // Handles desigated key presses
    handleKeyDown(pressedKey) {
       const n = 78;
+      let direction;
 
       if (pressedKey.keyCode >= 37 && pressedKey.keyCode <= 41) {
-         let direction = pressedKey.keyCode - 37;
+         direction = pressedKey.keyCode - 37;
          this.setState({ board: this.handleMatchedClass(this.state.board) });
          this.move(direction);
       } else if (pressedKey.keyCode === n) {
@@ -271,15 +266,49 @@ class App extends React.Component {
                               // cell[1] = 1(matched) = 2(new)
                               matched={cell[1] === 1 ? true : false}
                               isNew={cell[1] === 2 ? true : false}
-                              isMoving={this.state.isMoving}
-                              row={rowIndex}
-                              column={i}
                            />
                         ))}
                      </tr>
                   ))}
                </table>
                <Modal {...this.state} />
+            </div>
+            <div className="bottom_container">
+               <p className="game_explanation">
+                  <b>How to play:</b> Use your
+                  <b> arrow keys</b> to move the tiles. When two tiles with the
+                  same number touch, they
+                  <b> merge into one!</b>
+               </p>
+               <hr />
+               <p className="game_credits">
+                  <b class="important">Note:</b> The game on{" "}
+                  <a href="http://git.io/2048">this site</a> is the original
+                  version of 2048. 2048 Bitcoin Edition is a derivative inspired
+                  by the original, created by{" "}
+                  <a href="http://gabrielecirulli.com" target="_blank">
+                     Gabriele Cirulli
+                  </a>
+                  . Based on{" "}
+                  <a
+                     href="https://itunes.apple.com/us/app/1024!/id823499224"
+                     target="_blank"
+                  >
+                     1024 by Veewo Studio
+                  </a>{" "}
+                  and conceptually similar to{" "}
+                  <a href="http://asherv.com/threes/" target="_blank">
+                     Threes by Asher Vollmer
+                  </a>
+                  .
+               </p>
+               <hr />
+               <p>
+                  Created by{" "}
+                  <a href="http://derekjleong.tech/" target=" blank">
+                     Derek J Leong
+                  </a>
+               </p>
             </div>
          </div>
       );
@@ -300,7 +329,7 @@ function Modal(props) {
 
 // Renders cells
 // Changes className according to value and only displays value if >0
-const Cell = ({ cellValue, matched, isNew, isMoving, row, column }) => {
+const Cell = ({ cellValue, matched, isNew }) => {
    let classNames = "tile";
    let value = cellValue === 0 ? "" : cellValue;
    if (isNew) {
