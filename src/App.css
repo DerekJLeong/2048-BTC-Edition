@@ -234,10 +234,6 @@ hr {
    background-color: #d8d4d0;
    height: 1px;
 }
-.game_explanation {
-}
-.gane_credits {
-}
 @keyframes pop {
    0% {
       transform: scale(0);

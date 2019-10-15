@@ -17,6 +17,8 @@ class App extends React.Component {
          bitcoin: 0
       };
       this.initBoard = this.initBoard.bind(this);
+      this.handleTouchStart = this.handleTouchStart.bind(this);
+      this.handleTouchEnd = this.handleTouchEnd.bind(this);
    }
 
    // Function to iniate a blank board/game
@@ -53,7 +55,7 @@ class App extends React.Component {
       clearInterval(this.interval);
    }
 
-   handleMatchedClass(board) {
+   handleRemoveAnimationCode(board) {
       const matchedBoard = board;
       let matchlessBoard = [];
       matchedBoard.forEach(row => {
@@ -77,7 +79,7 @@ class App extends React.Component {
 
       // 2 = new tile anmiation
       board[randomBlankCoord[0]][randomBlankCoord[1]] = [randomStartNumber, 2];
-
+      console.log(board);
       return board;
    }
    // Interates over each row and each column of said row, if the value is strictly '0'
@@ -102,6 +104,12 @@ class App extends React.Component {
       return randomStartNumber;
    }
 
+   initMove(direction) {
+      this.setState({
+         board: this.handleRemoveAnimationCode(this.state.board)
+      });
+      this.move(direction);
+   }
    // Passes direction code to move board in designated direction
    move(direction) {
       // First rotates board into base workable postion
@@ -120,7 +128,6 @@ class App extends React.Component {
             const movedBoardWithRandom = this.placeRandomStartNum(
                movedBoard.newBoard
             );
-
             if (this.checkForGameOver(movedBoardWithRandom)) {
                this.setState({
                   board: movedBoardWithRandom,
@@ -234,10 +241,43 @@ class App extends React.Component {
 
       if (pressedKey.keyCode >= 37 && pressedKey.keyCode <= 41) {
          direction = pressedKey.keyCode - 37;
-         this.setState({ board: this.handleMatchedClass(this.state.board) });
-         this.move(direction);
+         this.initMove(direction);
       } else if (pressedKey.keyCode === n) {
          this.initBoard();
+      }
+   }
+
+   handleTouchStart(event) {
+      if (this.state.board.gameOver) {
+         return;
+      }
+      if (event.touches.length !== 1) {
+         return;
+      }
+      this.startX = event.touches[0].screenX;
+      this.startY = event.touches[0].screenY;
+   }
+   handleTouchEnd(event) {
+      if (this.state.board.gameOver) {
+         return;
+      }
+      if (event.changedTouches.length !== 1) {
+         return;
+      }
+      let deltaX = event.changedTouches[0].screenX - this.startX;
+      let deltaY = event.changedTouches[0].screenY - this.startY;
+      let direction = -1;
+      if (Math.abs(deltaX) > 3 * Math.abs(deltaY) && Math.abs(deltaX) > 30) {
+         direction = deltaX > 0 ? 2 : 0;
+      } else if (
+         Math.abs(deltaY) > 3 * Math.abs(deltaX) &&
+         Math.abs(deltaY) > 30
+      ) {
+         direction = deltaY > 0 ? 3 : 1;
+      }
+      if (direction !== -1) {
+         //TODO why doesnt this function work here?
+         // this.initMove(direction);
       }
    }
 
@@ -247,16 +287,25 @@ class App extends React.Component {
             <div className="top_container">
                <CurrentBTC BTCUSD={this.state.bitcoin} />
                <Score score={this.state.score} />
-               <p className="intro">
+               <p className="intro" onClick={this.initMove.bind(this)}>
                   Join the numbers together and get a score <br />
                   greater than the <b>current USD/Bitcoin price!</b>
                </p>
-               <div className="reset_button" onClick={this.initBoard}>
+               <div
+                  className="reset_button"
+                  onClick={this.initBoard}
+                  onTouchEnd={this.initBoard}
+               >
                   New Game
                </div>
             </div>
             <div className="middle_container">
-               <table className="game_board">
+               <table
+                  className="game_board"
+                  onTouchStart={this.handleTouchStart}
+                  onTouchEnd={this.handleTouchEnd}
+                  tabIndex="1"
+               >
                   {this.state.board.map((row, rowIndex) => (
                      <tr key={rowIndex}>
                         {row.map((cell, i) => (
@@ -282,22 +331,37 @@ class App extends React.Component {
                </p>
                <hr />
                <p className="game_credits">
-                  <b class="important">Note:</b> The game on{" "}
-                  <a href="http://git.io/2048">this site</a> is the original
-                  version of 2048. 2048 Bitcoin Edition is a derivative inspired
-                  by the original, created by{" "}
-                  <a href="http://gabrielecirulli.com" target="_blank">
+                  <b>Note:</b> The game on{" "}
+                  <a
+                     href="http://git.io/2048"
+                     target=" blank"
+                     rel="noopener noreferrer"
+                  >
+                     this site
+                  </a>{" "}
+                  is the original version of 2048. 2048 Bitcoin Edition is a
+                  derivative inspired by the original, created by{" "}
+                  <a
+                     href="http://gabrielecirulli.com"
+                     target=" blank"
+                     rel="noopener noreferrer"
+                  >
                      Gabriele Cirulli
                   </a>
                   . Based on{" "}
                   <a
                      href="https://itunes.apple.com/us/app/1024!/id823499224"
                      target="_blank"
+                     rel="noopener noreferrer"
                   >
                      1024 by Veewo Studio
                   </a>{" "}
                   and conceptually similar to{" "}
-                  <a href="http://asherv.com/threes/" target="_blank">
+                  <a
+                     href="http://asherv.com/threes/"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                  >
                      Threes by Asher Vollmer
                   </a>
                   .
@@ -305,7 +369,11 @@ class App extends React.Component {
                <hr />
                <p>
                   Created by{" "}
-                  <a href="http://derekjleong.tech/" target=" blank">
+                  <a
+                     href="http://derekjleong.tech/"
+                     target=" blank"
+                     rel="noopener noreferrer"
+                  >
                      Derek J Leong
                   </a>
                </p>
