@@ -11,7 +11,7 @@ Score higher than the current BTC/USD price and win the game. Hodl on
 
 ## How to play
 
-soon! http://derekjleong.tech/2048BTC
+soon! http://derekjleong.tech/2048-BTC-Edition/
 
 OR
 
