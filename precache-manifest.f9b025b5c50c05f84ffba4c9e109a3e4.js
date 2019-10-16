@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "61eb4d6405d230cc118bed3b761776a3",
+    "revision": "befa96b1be5d8c754793c54df42352c4",
     "url": "/2048-BTC-Edition/index.html"
   },
   {
-    "revision": "a77c99f47e41cc38ef38",
+    "revision": "3db9fbab5957c2db4cec",
     "url": "/2048-BTC-Edition/static/css/main.496ee4c5.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/2048-BTC-Edition/static/js/2.ab533eb6.chunk.js"
   },
   {
-    "revision": "a77c99f47e41cc38ef38",
-    "url": "/2048-BTC-Edition/static/js/main.b119c4cf.chunk.js"
+    "revision": "3db9fbab5957c2db4cec",
+    "url": "/2048-BTC-Edition/static/js/main.f0da53c2.chunk.js"
   },
   {
     "revision": "858074a4900dc97ab8a0",
