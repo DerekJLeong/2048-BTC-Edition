@@ -368,7 +368,7 @@ class App extends React.Component {
                </p>
                <hr />
                <p>
-                  Created by{" "}
+                  © 2019 Developed by{" "}
                   <a
                      href="http://derekjleong.tech/"
                      target=" blank"
